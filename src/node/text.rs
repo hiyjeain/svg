@@ -1,8 +1,9 @@
+use std::any::Any;
 use std::collections::hash_map::DefaultHasher;
 use std::fmt;
 use std::hash::Hash;
 
-use crate::node::Node;
+use crate::node::{AsAny, Node};
 
 /// A text node.
 #[derive(Clone, Debug)]
@@ -27,6 +28,16 @@ impl fmt::Display for Text {
     #[inline]
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         escape(&self.content).fmt(formatter)
+    }
+}
+
+impl AsAny for Text {
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn Any {
+        self
     }
 }
 

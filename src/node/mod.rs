@@ -1,5 +1,6 @@
 //! The nodes.
 
+use std::any::Any;
 use std::collections::hash_map::DefaultHasher;
 use std::collections::HashMap;
 use std::fmt;
@@ -20,9 +21,14 @@ pub type Attributes = HashMap<String, Value>;
 /// Child nodes.
 pub type Children = Vec<Box<dyn Node>>;
 
+pub trait AsAny {
+    fn as_any(&self) -> &dyn Any;
+    fn as_any_mut(&mut self) -> &mut dyn Any;
+}
+
 /// A node.
 pub trait Node:
-    'static + fmt::Debug + fmt::Display + NodeClone + NodeDefaultHash + Send + Sync
+    'static + fmt::Debug + fmt::Display + NodeClone + NodeDefaultHash + Send + Sync + AsAny
 {
     /// Append a child node.
     #[inline]

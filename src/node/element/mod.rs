@@ -6,6 +6,8 @@
 use std::collections::hash_map::DefaultHasher;
 use std::fmt;
 use std::hash::Hash;
+use crate::node::AsAny;
+use std::any::Any;
 
 use crate::node::{Attributes, Children, Node, Value};
 
@@ -91,6 +93,16 @@ impl fmt::Display for Element {
     }
 }
 
+impl AsAny for Element {
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn Any {
+        self
+    }
+}
+
 impl Node for Element {
     #[inline]
     fn append<T>(&mut self, node: T)
@@ -158,6 +170,16 @@ macro_rules! implement_nested(
                 U: Into<Value>,
             {
                 Node::assign(&mut self, name, value);
+                self
+            }
+        }
+
+        impl AsAny for $struct_name {
+            fn as_any(&self) -> &dyn Any {
+                self
+            }
+
+            fn as_any_mut(&mut self) -> &mut dyn Any {
                 self
             }
         }
